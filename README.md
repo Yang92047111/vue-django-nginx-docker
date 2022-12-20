@@ -1,4 +1,4 @@
-# Vue x PHP x Nginx x Docker Compose
+# Vue x Django x Nginx x Docker Compose
 
 ## Describe
 
