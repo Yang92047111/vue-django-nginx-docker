@@ -1,0 +1,43 @@
+version: '3'
+services:
+
+    db:
+        container_name: db-comtainer
+        image: postgres
+        restart: always
+        environment:
+            POSTGRES_DB: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: 1234
+            PGDATA: /var/lib/postgresql/data
+        volumes:
+            - ./db:/var/lib/postgresql/data/
+        ports:
+            - "10903:5432"
+
+    nginx:
+        container_name: nginx-container
+        build: ./nginx
+        restart: always
+        ports:
+            - "8080:80"
+            - "10901:22"
+        volumes:
+            - "./web_app:/web_app"
+            - "./nginx/log:/var/log/nginx"
+            - "./nginx/default.conf:/etc/nginx/conf.d/default.conf"
+        depends_on:
+            - api
+
+    api:
+        container_name: backend-container
+        build: ./web_app
+        restart: always
+        # command: uwsgi --ini uwsgi.ini
+        volumes:
+            - ./web_app:/web_app
+        ports:
+            - "10902:22"
+        depends_on:
+            - db
+
